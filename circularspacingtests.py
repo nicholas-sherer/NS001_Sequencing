@@ -20,7 +20,7 @@ def rao_spacing(data, N):
     diff[:-1] = np.diff(sorted_data)
     diff[-1] = N + sorted_data[0] - sorted_data[-1]
     deviation_from_avg_spacing = np.abs(diff - N/m)
-    return (180/N)*np.sum(deviation_from_avg_spacing)
+    return (np.pi/N)*np.sum(deviation_from_avg_spacing)
 
 
 def censored_sample(data, intervals):
@@ -44,3 +44,8 @@ def union_intervals(intervals):
         else:
             b.append((begin, end))
     return b
+
+
+def circular_diff_x_space(data, x, N):
+    sorted_data = np.sort(data)
+    return (sorted_data - np.roll(sorted_data, x)) % N
