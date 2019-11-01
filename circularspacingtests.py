@@ -7,6 +7,7 @@ Created on Wed Oct 16 15:32:24 2019
 """
 
 import numpy as np
+from scipy.stats import binom
 
 
 # An implementation of rao's spacing test but instead of using degrees as the
@@ -49,3 +50,16 @@ def union_intervals(intervals):
 def circular_diff_x_space(data, x, N):
     sorted_data = np.sort(data)
     return (sorted_data - np.roll(sorted_data, x)) % N
+
+
+def p_clusters(data, N):
+    m = data.size
+    wrap_by_x = np.zeros((m, m), dtype='int')
+    for i in range(m):
+        wrap_by_x[i, :] = circular_diff_x_space(data, i, N) + 1
+    spacing = np.arange(1, m+1).reshape(m, 1)
+    return binom.pmf(spacing, m, wrap_by_x/N)
+
+
+def p_kcluster_in_l(k, l, m, N):
+    return binom.pmf(k, m, l/N)
