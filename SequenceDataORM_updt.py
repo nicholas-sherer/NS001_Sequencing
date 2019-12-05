@@ -54,6 +54,13 @@ class Gene(Base):
     DELs = relationship('DEL_Mutation', back_populates='gene_r')
     INSs = relationship('INS_Mutation', back_populates='gene_r')
 
+    @hybrid_property
+    def length(self):
+        if self.start:
+            return self.end - self.start + 1
+        else:
+            return None
+
     def __repr__(self):
         return ("<Gene(name='{0}', intergenic={1})>").format(self.name,
                                                              self.intergenic)
