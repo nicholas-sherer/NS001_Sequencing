@@ -55,7 +55,7 @@ def num_m_clusters(m, k, N, L, max_draws=10**5):
     nums = []
     for i in range(max_draws):
         smpl = np.sort(np.random.choice(L, N))
-        m_space = (smpl - np.roll(smpl, m)) % L + 1
+        m_space = (smpl - np.roll(smpl, m - 1)) % L + 1
         nums.append(np.sum(m_space < k))
     return nums
 
