@@ -35,6 +35,31 @@ def censored_sample(data, intervals):
     return cens_sample
 
 
+def p_extreme_cluster(m, k, N, L, max_draws=10**5):
+    '''
+    Probability that given N mutations in an L length genome there will be
+    some cluster of m mutations in length k or less.
+
+    Computed approximately by simulation of actual draws.
+    '''
+    count = 0
+    for i in range(max_draws):
+        smpl = np.sort(np.random.choice(L, N))
+        m_space = np.min((smpl - np.roll(smpl, m - 1)) % L) + 1
+        if m_space < k:
+            count = count + 1
+    return count / max_draws
+
+
+def num_m_clusters(m, k, N, L, max_draws=10**5):
+    nums = []
+    for i in range(max_draws):
+        smpl = np.sort(np.random.choice(L, N))
+        m_space = (smpl - np.roll(smpl, m)) % L + 1
+        nums.append(np.sum(m_space < k))
+    return nums
+
+
 # taken from stack_overflow question
 # https://stackoverflow.com/questions/15273693/python-union-of-multiple-ranges
 def union_intervals(intervals):
